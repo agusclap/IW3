@@ -22,12 +22,12 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(length = 100, unique=true) // unique es para que el nombre del producto sea unico al igual que el id
     private String product;
 
-    @Column(columnDefinition = "tinyint deafult 0")
+    @Column(columnDefinition = "tinyint default 0")
     private boolean stock = false;
 
     private double precio;

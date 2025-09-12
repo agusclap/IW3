@@ -1,6 +1,7 @@
 package ar.edu.iua.iw3.model.business;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,32 +29,76 @@ public class ProductBusiness implements IProductBusiness {
 
     @Override
     public Product load(long id) throws NotFoundException, BusinessException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'load'");
+        Optional<Product> r;
+        try {
+            r = productDAO.findById(id);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
+        if (r.isEmpty()) {
+            throw NotFoundException.builder().message("No se encuentra el Producto id=" + id).build();
+        }
+        return r.get();
     }
 
     @Override
     public Product load(String product) throws NotFoundException, BusinessException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'load'");
+        Optional<Product> r;
+        try {
+            r = productDAO.findByProduct(product);
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
+        if(r.isEmpty()){
+            throw NotFoundException.builder().message("No se encuentra el Producto '" + product + "'").build();
+        }
+        return r.get();
     }
 
     @Override
     public Product add(Product product) throws FoundException, BusinessException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'add'");
+        
+        try{
+            load(product.getId());
+            throw FoundException.builder().message("Se encontro el Producto id=" + product.getId()).build();
+        } catch (NotFoundException e) {    
+        }
+        try {
+            load(product.getProduct());
+            throw FoundException.builder().message("Se encontro el Producto '" + product.getProduct() + "'").build();
+        }catch (NotFoundException e){
+        }
+
+        try {
+            return productDAO.save(product);
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
     }
 
     @Override
     public Product update(Product product) throws NotFoundException, BusinessException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        load(product.getId());
+        try {
+            return productDAO.save(product);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
     }
 
     @Override
     public void delete(long id) throws NotFoundException, BusinessException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        load(id);
+        try {
+            productDAO.deleteById(id);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
     }
 
 }
