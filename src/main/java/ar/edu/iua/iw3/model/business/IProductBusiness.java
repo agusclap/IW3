@@ -14,7 +14,7 @@ public interface IProductBusiness {
 
     public Product add(Product product) throws FoundException, BusinessException;
 
-    public Product update(Product product) throws NotFoundException, BusinessException;
+    public Product update(Product product) throws FoundException, NotFoundException, BusinessException;
 
     public void delete(long id) throws NotFoundException, BusinessException;
     

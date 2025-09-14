@@ -1,0 +1,3 @@
+comando para ejecutar .jar: mvn clean package -P jar-build -DskipTests <-- crea el archivo
+y luego: java -jar .\target\iw3.jar --spring.profiles.active=mysqldev <-- ejecuta
+para el war: mvn clean package -DskipTests
