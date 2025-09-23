@@ -88,6 +88,18 @@
 	</dependencies>
 	<profiles>
 		<profile>
+			<id>cli1</id>
+			<properties>
+				<spring.profiles.active>cli1</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>cli2</id>
+			<properties>
+				<spring.profiles.active>cli2</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
 			<id>mysqldev</id>
 			<properties>
 				<spring.profiles.active>mysqldev</spring.profiles.active>
