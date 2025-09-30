@@ -1,4 +1,4 @@
-package ar.edu.iua.iw3.Integration.cli1.model.business;
+package ar.edu.iua.iw3.integration.cli1.model.business;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.iua.iw3.Integration.cli1.model.ProductCli1;
-import ar.edu.iua.iw3.Integration.cli1.model.persistence.ProductCli1Repository;
+import ar.edu.iua.iw3.integration.cli1.model.ProductCli1;
+import ar.edu.iua.iw3.integration.cli1.model.persistence.ProductCli1Repository;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.FoundException;
 import ar.edu.iua.iw3.model.business.IProductBusiness;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductCli1Business implements IProductCli1Business {
 
-    @Autowired
+    @Autowired(required = false)
     private ProductCli1Repository productDAO;
 
     @Override

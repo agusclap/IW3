@@ -1,8 +1,8 @@
-package ar.edu.iua.iw3.Integration.cli1.model.business;
+package ar.edu.iua.iw3.integration.cli1.model.business;
 
 import java.util.List;
 
-import ar.edu.iua.iw3.Integration.cli1.model.ProductCli1;
+import ar.edu.iua.iw3.integration.cli1.model.ProductCli1;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.FoundException;
 import ar.edu.iua.iw3.model.business.NotFoundException;

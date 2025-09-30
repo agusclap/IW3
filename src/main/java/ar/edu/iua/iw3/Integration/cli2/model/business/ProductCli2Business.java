@@ -1,4 +1,4 @@
-package ar.edu.iua.iw3.Integration.cli2.model.business;
+package ar.edu.iua.iw3.integration.cli2.model.business;
 
 import java.util.Date;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.iua.iw3.Integration.cli2.model.ProductCli2;
-import ar.edu.iua.iw3.Integration.cli2.model.persistence.ProductCli2Repository;
+import ar.edu.iua.iw3.integration.cli2.model.ProductCli2;
+import ar.edu.iua.iw3.integration.cli2.model.persistence.ProductCli2Repository;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 

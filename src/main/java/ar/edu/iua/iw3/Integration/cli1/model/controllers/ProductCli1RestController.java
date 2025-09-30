@@ -1,10 +1,11 @@
-package ar.edu.iua.iw3.Integration.cli1.model.controllers;
+package ar.edu.iua.iw3.integration.cli1.model.controllers;
 
 
 
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.iua.iw3.Integration.cli1.model.ProductCli1;
-import ar.edu.iua.iw3.Integration.cli1.model.business.IProductCli1Business;
 import ar.edu.iua.iw3.controllers.BaseRestController;
 import ar.edu.iua.iw3.controllers.Constants;
+import ar.edu.iua.iw3.integration.cli1.model.ProductCli1;
+import ar.edu.iua.iw3.integration.cli1.model.business.IProductCli1Business;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.FoundException;
 import ar.edu.iua.iw3.model.business.NotFoundException;
@@ -26,6 +27,7 @@ import ar.edu.iua.iw3.util.IStandartResponseBusiness;
 
 @RestController
 @RequestMapping(Constants.URL_INTEGRATION_CLI1 + "/products")
+@Profile("cli1")
 public class ProductCli1RestController extends BaseRestController{
 
     @Autowired

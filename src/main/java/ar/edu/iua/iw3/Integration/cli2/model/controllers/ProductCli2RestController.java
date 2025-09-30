@@ -1,9 +1,10 @@
-package ar.edu.iua.iw3.Integration.cli2.model.controllers;
+package ar.edu.iua.iw3.integration.cli2.model.controllers;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.iua.iw3.Integration.cli2.model.business.IProductCli2Business;
 import ar.edu.iua.iw3.controllers.Constants;
+import ar.edu.iua.iw3.integration.cli2.model.business.IProductCli2Business;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.util.IStandartResponseBusiness;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(Constants.URL_INTEGRATION_CLI2 + "/products")
 @Slf4j
+@Profile("cli2")
 public class ProductCli2RestController {
 
     @Autowired
