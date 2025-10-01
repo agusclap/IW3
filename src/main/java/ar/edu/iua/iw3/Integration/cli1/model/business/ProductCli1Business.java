@@ -6,12 +6,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ar.edu.iua.iw3.integration.cli1.model.ProductCli1;
+import ar.edu.iua.iw3.integration.cli1.model.ProductCli1JsonDeserializer;
 import ar.edu.iua.iw3.integration.cli1.model.persistence.ProductCli1Repository;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.FoundException;
+import ar.edu.iua.iw3.model.business.ICategoryBusiness;
 import ar.edu.iua.iw3.model.business.IProductBusiness;
 import ar.edu.iua.iw3.model.business.NotFoundException;
+import ar.edu.iua.iw3.util.JsonUtiles;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -70,4 +76,22 @@ public class ProductCli1Business implements IProductCli1Business {
         }
     }
 
+    @Autowired(required = false)
+	private ICategoryBusiness categoryBusiness;
+
+	@Override
+	public ProductCli1 addExternal(String json) throws FoundException, BusinessException {
+		ObjectMapper mapper = JsonUtiles.getObjectMapper(ProductCli1.class,
+				new ProductCli1JsonDeserializer(ProductCli1.class, categoryBusiness),null);
+		ProductCli1 product = null;
+		try {
+			product = mapper.readValue(json, ProductCli1.class);
+		} catch (JsonProcessingException e) {
+			log.error(e.getMessage(), e);
+			throw BusinessException.builder().ex(e).build();
+		}
+
+		return add(product);
+
+	}
 }
