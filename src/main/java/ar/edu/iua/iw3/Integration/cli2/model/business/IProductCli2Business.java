@@ -10,4 +10,5 @@ import ar.edu.iua.iw3.model.business.BusinessException;
 public interface IProductCli2Business {
     public List<ProductCli2> listExpired(Date since) throws BusinessException;
     public List<ProductCli2SlimView> listSlim() throws BusinessException;
+    public List<ProductCli2> listByPrice(Double startPrice, Double endPrice) throws BusinessException;
 }

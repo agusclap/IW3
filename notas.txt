@@ -1,3 +1,9 @@
 comando para ejecutar .jar: mvn clean package -P jar-build -DskipTests <-- crea el archivo
 y luego: java -jar .\target\iw3.jar --spring.profiles.active=mysqldev <-- ejecuta
 para el war: mvn clean package -DskipTests
+
+Consultas REST CLI2 productos por precio:
+- Ambos límites: curl -G "http://localhost:8080/api/v1/integration/cli2/products/list-by-price" --data-urlencode "start-price=10" --data-urlencode "end-price=20"
+- Sólo start-price: curl -G "http://localhost:8080/api/v1/integration/cli2/products/list-by-price" --data-urlencode "start-price=10"
+- Sólo end-price: curl -G "http://localhost:8080/api/v1/integration/cli2/products/list-by-price" --data-urlencode "end-price=20"
+- Sin límites: curl "http://localhost:8080/api/v1/integration/cli2/products/list-by-price"

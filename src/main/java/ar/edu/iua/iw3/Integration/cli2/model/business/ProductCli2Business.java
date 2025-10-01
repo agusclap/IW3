@@ -30,12 +30,36 @@ public class ProductCli2Business implements IProductCli2Business {
     }
     
     @Override
-	public List<ProductCli2SlimView> listSlim() throws BusinessException {
-		try {
-			return productDAO.findByOrderByPrecioDesc();
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw BusinessException.builder().ex(e).build();
-		}
-	}
+    public List<ProductCli2SlimView> listSlim() throws BusinessException {
+        try {
+            return productDAO.findByOrderByPrecioDesc();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
+    }
+
+    @Override
+    public List<ProductCli2> listByPrice(Double startPrice, Double endPrice) throws BusinessException {
+        try {
+            if (startPrice != null && endPrice != null) {
+                double lower = Math.min(startPrice, endPrice);
+                double upper = Math.max(startPrice, endPrice);
+                return productDAO.findByPrecioBetweenOrderByPrecioAsc(lower, upper);
+            }
+
+            if (startPrice != null) {
+                return productDAO.findByPrecioGreaterThanEqualOrderByPrecioAsc(startPrice);
+            }
+
+            if (endPrice != null) {
+                return productDAO.findByPrecioLessThanEqualOrderByPrecioAsc(endPrice);
+            }
+
+            return productDAO.findAllByOrderByPrecioAsc();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
+    }
 }
