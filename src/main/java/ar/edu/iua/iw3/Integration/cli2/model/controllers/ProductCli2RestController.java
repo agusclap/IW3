@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -90,6 +91,14 @@ public class ProductCli2RestController {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("location", Constants.URL_INTEGRATION_CLI2 + "/products/" + saved.getId());
             return new ResponseEntity<>(saved, responseHeaders, HttpStatus.CREATED);
+
+    @PostMapping(value = "/b2b", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addExternal(@RequestBody ProductCli2 product) {
+        try {
+            ProductCli2 saved = productBusiness.add(product);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("location", Constants.URL_INTEGRATION_CLI2 + "/products/" + saved.getId());
+            return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
         } catch (BusinessException e) {
             return new ResponseEntity<>(response.build(HttpStatus.INTERNAL_SERVER_ERROR, e, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
