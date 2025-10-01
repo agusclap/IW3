@@ -6,13 +6,16 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -22,6 +25,7 @@ import ar.edu.iua.iw3.integration.cli2.model.ProductCli2;
 import ar.edu.iua.iw3.integration.cli2.model.ProductCli2SlimV1JsonSerializer;
 import ar.edu.iua.iw3.integration.cli2.model.business.IProductCli2Business;
 import ar.edu.iua.iw3.model.business.BusinessException;
+import ar.edu.iua.iw3.model.business.FoundException;
 import ar.edu.iua.iw3.util.IStandartResponseBusiness;
 import ar.edu.iua.iw3.util.JsonUtiles;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +80,21 @@ public class ProductCli2RestController {
         } catch (BusinessException e) {
             return new ResponseEntity<>(response.build(HttpStatus.INTERNAL_SERVER_ERROR, e, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/b2b", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addExternal(@RequestBody ProductCli2 product) {
+        try {
+            ProductCli2 saved = productBusiness.addExternal(product);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("location", Constants.URL_INTEGRATION_CLI2 + "/products/" + saved.getId());
+            return new ResponseEntity<>(saved, responseHeaders, HttpStatus.CREATED);
+        } catch (BusinessException e) {
+            return new ResponseEntity<>(response.build(HttpStatus.INTERNAL_SERVER_ERROR, e, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (FoundException e) {
+            return new ResponseEntity<>(response.build(HttpStatus.FOUND, e, e.getMessage()), HttpStatus.FOUND);
         }
     }
 }

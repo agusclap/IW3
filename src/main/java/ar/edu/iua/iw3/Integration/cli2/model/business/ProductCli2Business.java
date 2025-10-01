@@ -10,6 +10,9 @@ import ar.edu.iua.iw3.integration.cli2.model.ProductCli2;
 import ar.edu.iua.iw3.integration.cli2.model.ProductCli2SlimView;
 import ar.edu.iua.iw3.integration.cli2.model.persistence.ProductCli2Repository;
 import ar.edu.iua.iw3.model.business.BusinessException;
+import ar.edu.iua.iw3.model.business.FoundException;
+import ar.edu.iua.iw3.model.business.IProductBusiness;
+import ar.edu.iua.iw3.model.business.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -18,6 +21,9 @@ public class ProductCli2Business implements IProductCli2Business {
 
     @Autowired(required = false)
     private ProductCli2Repository productDAO;
+
+    @Autowired
+    private IProductBusiness productBaseBusiness;
 
     @Override
     public List<ProductCli2> listExpired(Date date) throws BusinessException {
@@ -61,5 +67,32 @@ public class ProductCli2Business implements IProductCli2Business {
             log.error(e.getMessage(), e);
             throw BusinessException.builder().ex(e).build();
         }
+    }
+
+    @Override
+    public ProductCli2 add(ProductCli2 product) throws FoundException, BusinessException {
+        try {
+            productBaseBusiness.load(product.getId());
+            throw FoundException.builder().message("Se encontró el Producto id=" + product.getId()).build();
+        } catch (NotFoundException e) {
+        }
+
+        try {
+            productBaseBusiness.load(product.getProduct());
+            throw FoundException.builder().message("Se encontró el Producto '" + product.getProduct() + "'").build();
+        } catch (NotFoundException e) {
+        }
+
+        try {
+            return productDAO.save(product);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().ex(e).build();
+        }
+    }
+
+    @Override
+    public ProductCli2 addExternal(ProductCli2 product) throws FoundException, BusinessException {
+        return add(product);
     }
 }
