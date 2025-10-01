@@ -7,3 +7,7 @@ Consultas REST CLI2 productos por precio:
 - Sólo start-price: curl -G "http://localhost:8080/api/v1/integration/cli2/products/list-by-price" --data-urlencode "start-price=10"
 - Sólo end-price: curl -G "http://localhost:8080/api/v1/integration/cli2/products/list-by-price" --data-urlencode "end-price=20"
 - Sin límites: curl "http://localhost:8080/api/v1/integration/cli2/products/list-by-price"
+
+
+spring.datasource.url = jdbc:mysql://localhost:33306/iw3_2025?createDatabaseIfNotExist=true&verifyServerCertificate=false&useSSL=false&allowPublicKeyRetrieval=true
+
