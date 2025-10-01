@@ -7,7 +7,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.slf4j.LoggerFactory;
 
+import ar.edu.iua.iw3.integration.cli1.model.ProductDescriptionMissingException;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.ICategoryBusiness;
 import ar.edu.iua.iw3.model.business.NotFoundException;
@@ -34,8 +36,13 @@ public class ProductCli1JsonDeserializer extends StdDeserializer<ProductCli1> {
 
 		String code = JsonUtiles.getString(node, "product_code,code_product,code".split(","),
 				System.currentTimeMillis() + "");
-		String productDesc = JsonUtiles.getString(node,
-				"product,description,product_description,product_name".split(","), null);
+                String productDesc = JsonUtiles.getString(node,
+                                "product,description,product_description,product_name".split(","), null);
+                if (productDesc == null || productDesc.isBlank()) {
+                        LoggerFactory.getLogger(ProductCli1JsonDeserializer.class)
+                                        .warn("Product description is missing in payload: {}", node.toString());
+                        throw new ProductDescriptionMissingException("La descripción del producto es obligatoria");
+                }
 		double price = JsonUtiles.getDouble(node, "product_price,price_product,price".split(","), 0);
 		boolean stock = JsonUtiles.getBoolean(node, "stock,in_stock".split(","), false);
 		r.setCodCli1(code);

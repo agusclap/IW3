@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ar.edu.iua.iw3.integration.cli1.model.ProductCli1;
 import ar.edu.iua.iw3.integration.cli1.model.ProductCli1JsonDeserializer;
+import ar.edu.iua.iw3.integration.cli1.model.ProductDescriptionMissingException;
 import ar.edu.iua.iw3.integration.cli1.model.persistence.ProductCli1Repository;
 import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.FoundException;
@@ -84,12 +85,14 @@ public class ProductCli1Business implements IProductCli1Business {
 		ObjectMapper mapper = JsonUtiles.getObjectMapper(ProductCli1.class,
 				new ProductCli1JsonDeserializer(ProductCli1.class, categoryBusiness),null);
 		ProductCli1 product = null;
-		try {
-			product = mapper.readValue(json, ProductCli1.class);
-		} catch (JsonProcessingException e) {
-			log.error(e.getMessage(), e);
-			throw BusinessException.builder().ex(e).build();
-		}
+                try {
+                        product = mapper.readValue(json, ProductCli1.class);
+                } catch (ProductDescriptionMissingException e) {
+                        throw BusinessException.builder().message(e.getMessage()).ex(e).build();
+                } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
+                        throw BusinessException.builder().ex(e).build();
+                }
 
 		return add(product);
 
