@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ar.edu.iua.iw3.integration.cli2.model.ProductCli2;
 import ar.edu.iua.iw3.integration.cli2.model.ProductCli2SlimView;
 import ar.edu.iua.iw3.integration.cli2.model.persistence.ProductCli2Repository;
@@ -13,6 +16,11 @@ import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.FoundException;
 import ar.edu.iua.iw3.model.business.IProductBusiness;
 import ar.edu.iua.iw3.model.business.NotFoundException;
+
+import ar.edu.iua.iw3.model.business.ICategoryBusiness;
+import ar.edu.iua.iw3.integration.cli2.model.ProductCli2JsonDeserializer;
+import ar.edu.iua.iw3.util.JsonUtiles;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -24,6 +32,12 @@ public class ProductCli2Business implements IProductCli2Business {
 
     @Autowired
     private IProductBusiness productBaseBusiness;
+
+
+    @Autowired(required = false)
+    private ICategoryBusiness categoryBusiness;
+
+
 
     @Override
     public List<ProductCli2> listExpired(Date date) throws BusinessException {
@@ -90,4 +104,19 @@ public class ProductCli2Business implements IProductCli2Business {
             throw BusinessException.builder().ex(e).build();
         }
     }
+
+
+    @Override
+    public ProductCli2 addExternal(String json) throws FoundException, BusinessException {
+        ObjectMapper mapper = JsonUtiles.getObjectMapper(ProductCli2.class,
+                new ProductCli2JsonDeserializer(ProductCli2.class, categoryBusiness), null);
+        try {
+            ProductCli2 product = mapper.readValue(json, ProductCli2.class);
+            return add(product);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+            throw BusinessException.builder().message(e.getOriginalMessage()).ex(e).build();
+        }
+    }
+
 }

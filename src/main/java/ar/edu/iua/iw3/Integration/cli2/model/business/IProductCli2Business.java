@@ -13,4 +13,7 @@ public interface IProductCli2Business {
     public List<ProductCli2SlimView> listSlim() throws BusinessException;
     public List<ProductCli2> listByPrice(Double startPrice, Double endPrice) throws BusinessException;
     public ProductCli2 add(ProductCli2 product) throws FoundException, BusinessException;
+    public ProductCli2 addExternal(String json) throws FoundException, BusinessException;
+
+
 }
