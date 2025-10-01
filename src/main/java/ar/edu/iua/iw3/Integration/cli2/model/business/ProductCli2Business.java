@@ -16,9 +16,11 @@ import ar.edu.iua.iw3.model.business.BusinessException;
 import ar.edu.iua.iw3.model.business.FoundException;
 import ar.edu.iua.iw3.model.business.IProductBusiness;
 import ar.edu.iua.iw3.model.business.NotFoundException;
+
 import ar.edu.iua.iw3.model.business.ICategoryBusiness;
 import ar.edu.iua.iw3.integration.cli2.model.ProductCli2JsonDeserializer;
 import ar.edu.iua.iw3.util.JsonUtiles;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -31,8 +33,11 @@ public class ProductCli2Business implements IProductCli2Business {
     @Autowired
     private IProductBusiness productBaseBusiness;
 
+
     @Autowired(required = false)
     private ICategoryBusiness categoryBusiness;
+
+
 
     @Override
     public List<ProductCli2> listExpired(Date date) throws BusinessException {
@@ -100,6 +105,7 @@ public class ProductCli2Business implements IProductCli2Business {
         }
     }
 
+
     @Override
     public ProductCli2 addExternal(String json) throws FoundException, BusinessException {
         ObjectMapper mapper = JsonUtiles.getObjectMapper(ProductCli2.class,
@@ -112,4 +118,5 @@ public class ProductCli2Business implements IProductCli2Business {
             throw BusinessException.builder().message(e.getOriginalMessage()).ex(e).build();
         }
     }
+
 }
