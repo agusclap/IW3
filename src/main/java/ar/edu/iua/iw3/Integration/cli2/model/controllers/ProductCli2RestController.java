@@ -41,7 +41,7 @@ public class ProductCli2RestController {
     @GetMapping(value = "list-expired", produces =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> listExpired(
             @RequestParam(name = "since", required = false, defaultValue = "1970-01-01 00:00:00") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date since,
-			@RequestParam(name = "slim", required = false, defaultValue = "v0") String slimVersion) throws JsonProcessingException {
+                        @RequestParam(name = "slim", required = false, defaultValue = "v0") String slimVersion) throws JsonProcessingException {
                 try {
                     Calendar c = Calendar.getInstance();
                     c.setTime(since);
@@ -66,4 +66,16 @@ public class ProductCli2RestController {
                             HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
+
+    @GetMapping(value = "list-by-price", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> listByPrice(
+            @RequestParam(name = "start-price", required = false) Double startPrice,
+            @RequestParam(name = "end-price", required = false) Double endPrice) {
+        try {
+            return new ResponseEntity<>(productBusiness.listByPrice(startPrice, endPrice), HttpStatus.OK);
+        } catch (BusinessException e) {
+            return new ResponseEntity<>(response.build(HttpStatus.INTERNAL_SERVER_ERROR, e, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
